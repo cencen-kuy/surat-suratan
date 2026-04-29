@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surat Buat Amel</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:
+  linear-gradient(
+    135deg,
+    #ff5fa2,
+    #ff85b8,
+    #ffb3d9,
+    #ffd6eb
+  );
+
+  font-family:'Georgia', serif;
+  overflow:hidden;
+  padding:20px;
+}
+
+/* ===== AMPLOP ===== */
+.envelope{
+  position:relative;
+  width:320px;
+  height:220px;
+  cursor:pointer;
+  z-index:5;
+  transition:1s;
+}
+
+.envelope-body{
+  position:absolute;
+  width:100%;
+  height:100%;
+
+  background:linear-gradient(
+    135deg,
+    #ff4f93,
+    #ff75ac
+  );
+
+  border-radius:12px;
+
+  box-shadow:
+  0 15px 35px rgba(255,20,147,0.4),
+  0 0 30px rgba(255,105,180,0.4);
+
+  overflow:hidden;
+}
+
+.flap{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  clip-path:polygon(0 0, 50% 55%, 100% 0);
+
+  background:linear-gradient(
+    135deg,
+    #ff2f7d,
+    #ff6fa5
+  );
+
+  transform-origin:top;
+  transition:1s ease;
+  z-index:3;
+}
+
+.letter-icon{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:55px;
+  z-index:2;
+
+  animation:float 2s ease-in-out infinite;
+}
+
+.letter-icon::before{
+  content:"";
+}
+
+@keyframes float{
+  0%{
+    transform:translateY(0px);
+  }
+
+  50%{
+    transform:translateY(-10px);
+  }
+
+  100%{
+    transform:translateY(0px);
+  }
+}
+
+.envelope.open .flap{
+  transform:rotateX(180deg);
+}
+
+.envelope.open{
+  transform:translateY(-120px) scale(0.7);
+  opacity:0;
+}
+
+/* ===== SURAT ===== */
+.card{
+  width:100%;
+  max-width:430px;
+  max-height:85vh;
+  overflow-y:auto;
+
+  background:rgba(255,255,255,0.96);
+
+  padding:35px;
+  border-radius:30px;
+
+  border:2px solid rgba(255,105,180,0.25);
+
+  box-shadow:
+  0 20px 40px rgba(255,20,147,0.25),
+  0 0 35px rgba(255,105,180,0.25);
+
+  position:absolute;
+  z-index:1;
+
+  opacity:0;
+  transform:translateY(180px) scale(0.6) rotate(-5deg);
+
+  transition:1.5s cubic-bezier(.17,.89,.32,1.49);
+}
+
+.card.show{
+  opacity:1;
+  transform:translateY(0) scale(1) rotate(0deg);
+}
+
+.card::-webkit-scrollbar{
+  width:6px;
+}
+
+.card::-webkit-scrollbar-thumb{
+  background:#ff75ac;
+  border-radius:10px;
+}
+
+h1{
+  color:#ff2f7d;
+  margin-bottom:18px;
+  font-size:32px;
+  text-align:center;
+
+  text-shadow:
+  0 0 10px rgba(255,105,180,0.4);
+}
+
+.line{
+  width:80px;
+  height:3px;
+
+  background:linear-gradient(
+    90deg,
+    #ff4f93,
+    #ff9ac6
+  );
+
+  margin:0 auto 25px;
+  border-radius:10px;
+}
+
+p{
+  color:#555;
+  line-height:2;
+  font-size:16px;
+  text-align:left;
+}
+
+.signature{
+  margin-top:30px;
+  font-style:italic;
+  color:#ff4f93;
+  text-align:right;
+}
+
+.btn{
+  margin-top:25px;
+  padding:12px 24px;
+  border:none;
+  border-radius:30px;
+
+  background:linear-gradient(
+    135deg,
+    #ff4f93,
+    #ff75ac
+  );
+
+  color:white;
+  cursor:pointer;
+  font-size:15px;
+
+  transition:0.3s;
+
+  box-shadow:
+  0 5px 20px rgba(255,20,147,0.3);
+}
+
+.btn:hover{
+  transform:scale(1.08);
+
+  background:linear-gradient(
+    135deg,
+    #ff2f7d,
+    #ff5fa2
+  );
+}
+
+/* ===== BUNGA JATUH ===== */
+.flower{
+  position:absolute;
+  top:-50px;
+  font-size:25px;
+
+  animation:fall 6s linear forwards;
+
+  opacity:0.8;
+  pointer-events:none;
+}
+
+@keyframes fall{
+
+  0%{
+    transform:
+    translateY(-50px)
+    rotate(0deg);
+
+    opacity:0;
+  }
+
+  20%{
+    opacity:1;
+  }
+
+  100%{
+    transform:
+    translateY(110vh)
+    rotate(360deg);
+
+    opacity:0;
+  }
+}
+
+/* ===== BUKET BUNGA ===== */
+.flower-burst{
+  position:fixed;
+  left:50%;
+  top:70%;
+  font-size:40px;
+  pointer-events:none;
+  z-index:999;
+
+  animation:burst 2s ease forwards;
+}
+
+@keyframes burst{
+  0%{
+    transform:
+    translate(-50%,-50%)
+    scale(0);
+
+    opacity:0;
+  }
+
+  20%{
+    opacity:1;
+  }
+
+  100%{
+    transform:
+    translate(
+      calc(-50% + var(--x)),
+      calc(-50% + var(--y))
+    )
+    scale(1.8)
+    rotate(360deg);
+
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- AMPLOP -->
+<div class="envelope" onclick="openLetter()">
+
+  <div class="envelope-body"></div>
+
+  <div class="flap"></div>
+
+  <div class="letter-icon"></div>
+
+</div>
+
+<!-- SURAT -->
+<div class="card" id="letter">
+
+<h1>Buat Amel 🤍</h1>
+
+<div class="line"></div>
+
+<p>
+Aku cuma mau bilang...<br><br>
+
+Makasi banget udah datang dan ngasih warna buat hari-hariku.
+Mungkin kalau nggak karena Mimi badmood juga
+aku nggak bakal kenal mu wkwkwk <br><br>
+
+Aku seneng banget bisa kenal sama mu hehehe.
+Biarpun kadang aku habis topik kalok mau ngechat mu,
+btw aku diem-diem liatin repostan mu kok wkwkkw ini lebih ke gabut aja dan mastiin mu baik-baik aja,
+kamu kalok kenapa-kenapa cerita aja ya aku bakal denger kok santaiii cilll<br><br>
+
+Anjay sok menjadi pendengar yang baik aja aku nok, tapi masak mau deketin org ngga jadi pendengar yang baik? anjayyy deketin pede aja dulu,
+siapa tau bisa dapetin mu kan??? biar aku ngga tau hasilnya gimana WKWKWK.
+Soalnya yang deketin kamu banyak banget sih,
+jadi minder aku kle kle kle,tapi bukan Vincen nama nya kalok ngga trobos aja #tabrakyangmenghalangi<br><br>
+
+Kamu harus tetep semangat yaa 🤍
+Jangan terlalu digalauin lagi mantanmu tu.
+Aku tau kok mungkin kamu masih ada di fase relapse sama dia,
+dan aku sadar banget soal itu.<br><br>
+
+Makanya aku nggak terlalu maksa harus langsung sama mu.
+Stecu aja dulu (ngetik dengan nada kicau mania)<br><br>
+
+Mungkin ini keliatan alay jangan di hujat aku pliss,
+tapi jangan salah,
+aku buat ini sambil begadang pliss, kamu bilang jelek sedih sih hati mungil aku<br><br>
+
+Tapi serius,
+aku nyaman ada mu,
+dan aku cukup bahagia
+setiap ngeliat muu bisa senyum atau ketawa di sebelahku 🤍
+</p>
+
+<div class="signature">
+— dari Vincen yang imut dan ganteng(kata ibu ku sih wkwkwk) 💗
+</div>
+
+<button class="btn" onclick="showFlowerBucket()">
+klik aja cobaa wkwkwkwk
+</button>
+
+</div>
+
+<!-- AUDIO -->
+<audio id="music" loop>
+  <source src="Sempurna.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const music = document.getElementById("music");
+
+/* buka surat */
+function openLetter(){
+
+  const envelope =
+    document.querySelector(".envelope");
+
+  const letter =
+    document.getElementById("letter");
+
+  envelope.classList.add("open");
+
+  setTimeout(()=>{
+    letter.classList.add("show");
+  },900);
+
+  setTimeout(()=>{
+    music.volume = 0.5;
+    music.play();
+  },1200);
+
+  setInterval(createFlower,250);
+}
+
+/* bunga jatuh */
+function createFlower(){
+
+  const flower =
+    document.createElement("div");
+
+  flower.classList.add("flower");
+
+  flower.innerHTML = "🌸";
+
+  flower.style.left =
+    Math.random() * window.innerWidth + "px";
+
+  flower.style.fontSize =
+    Math.random() * 20 + 20 + "px";
+
+  document.body.appendChild(flower);
+
+  setTimeout(()=>{
+    flower.remove();
+  },6000);
+}
+
+/* 🌸 buket bunga meledak */
+function showFlowerBucket(){
+
+  for(let i = 0; i < 25; i++){
+
+    const burst =
+      document.createElement("div");
+
+    burst.classList.add("flower-burst");
+
+    burst.innerHTML = "💗";
+
+    burst.style.setProperty(
+      "--x",
+      (Math.random() * 600 - 300) + "px"
+    );
+
+    burst.style.setProperty(
+      "--y",
+      (Math.random() * -500) + "px"
+    );
+
+    document.body.appendChild(burst);
+
+    setTimeout(()=>{
+      burst.remove();
+    },2000);
+  }
+}
+</script>
+
+</body>
+</html>
